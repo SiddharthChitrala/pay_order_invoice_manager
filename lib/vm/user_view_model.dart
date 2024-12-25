@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user_model.dart';
 import '../provider/auth_repository.dart';
-import '../utils/utils.dart';
 
 class UserViewModel with ChangeNotifier {
   final AuthRepository _myRepo = AuthRepository();
 
-  UserModel? _user; // Define a private field for the user
+  UserModel? _user; // Private field for the user
   UserModel? get user => _user;
 
   void setUser(UserModel? user) {
@@ -15,47 +14,58 @@ class UserViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  // Method to save user data
+  /// Initialize SharedPreferences
+  Future<SharedPreferences> _getSharedPreferences() async {
+    return SharedPreferences.getInstance();
+  }
+
+  /// Save user data to SharedPreferences
   Future<bool> saveUser(UserModel user) async {
-    final SharedPreferences sp = await SharedPreferences.getInstance();
-    if (user.userIdentifier!.isNotEmpty) {
-      return sp.setString('userIdentifier', user.userIdentifier.toString());
+    final sp = await _getSharedPreferences();
+    if (user.userIdentifier?.isNotEmpty == true) {
+      return sp.setString('userIdentifier', user.userIdentifier!);
     } else {
       return false;
     }
   }
 
-  // Method to get user data
-  Future<UserModel> getUser() async {
-    final SharedPreferences sp = await SharedPreferences.getInstance();
-    final String? userIdentifier = sp.getString('userIdentifier');
-    if (userIdentifier?.isNotEmpty == true) {
-      return UserModel(userIdentifier: userIdentifier!);
+  /// Get user data from SharedPreferences
+  Future<UserModel?> getUser() async {
+    final sp = await _getSharedPreferences();
+    final userIdentifier = sp.getString('userIdentifier');
+    if (userIdentifier != null && userIdentifier.isNotEmpty) {
+      return UserModel(userIdentifier: userIdentifier);
     } else {
       print("UserIdentifier is null or empty");
-      return UserModel(userIdentifier: ''); // Return empty UserModel if null
-    }
-  }
-
-  Future<UserModel?> fetchUserData(
-      String userIdentifier, BuildContext context) async {
-    try {
-      // Ensure the method is GET
-      final userData = await _myRepo.getUserData(userIdentifier);
-      print('object');
-      print(userData);
-      setUser(userData); // Store user data in the ViewModel
-      return userData;
-    } catch (error) {
-      Utils.snackBar('Failed to fetch user data: ${error.toString()}', context);
-      print('Error fetching user data: ${error.toString()}');
       return null;
     }
   }
 
-  // Method to remove user data
-  Future<bool> remove() async {
-    final SharedPreferences sp = await SharedPreferences.getInstance();
+  Future<UserModel?> fetchUserData() async {
+    try {
+      final user = await getUser(); // Retrieve the stored user
+      if (user != null) {
+        print('UserIdentifier retrieved: ${user.userIdentifier}'); // Debug log
+
+        // Fetch data using userIdentifier
+        final fetchedUser = await _myRepo.getUserData(user.userIdentifier!);
+        print('Fetched User Data: $fetchedUser'); // Debug log
+
+        return fetchedUser; // Return full UserModel
+      } else {
+        print("User not found in SharedPreferences");
+        throw Exception('User not found');
+      }
+    } catch (error) {
+      print(
+          'Error fetching user data: ${error.toString()}'); // Debugging the error
+      return null;
+    }
+  }
+
+  /// Remove user data from SharedPreferences
+  Future<bool> removeUser() async {
+    final sp = await _getSharedPreferences();
     return sp.remove('userIdentifier');
   }
 }

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
 import '../vm/services/splash_services.dart';
-
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -11,12 +9,12 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  SplashServices splashServices = SplashServices();
+  final SplashServices splashServices = SplashServices();
 
   @override
   void initState() {
     super.initState();
-    splashServices.checkAuthentication(context);
+    splashServices.checkAuthentication(context); // Call authentication check
   }
 
   @override
@@ -25,10 +23,12 @@ class _SplashScreenState extends State<SplashScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
       ),
-      body: Center(
-        child: Text('Splash Screen',  
-        style: TextStyle(fontSize: 20),),
-      )
+      body: const Center(
+        child: Text(
+          'Splash Screen',
+          style: TextStyle(fontSize: 20),
+        ),
+      ),
     );
   }
 }

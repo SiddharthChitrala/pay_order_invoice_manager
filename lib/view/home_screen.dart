@@ -6,7 +6,7 @@ import '../utils/routes/routes_name.dart';
 import '../utils/utils.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -15,7 +15,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    final userViewModel = Provider.of<UserViewModel>(context);
+    final userViewModel = Provider.of<UserViewModel>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -23,56 +23,54 @@ class _HomeScreenState extends State<HomeScreen> {
         automaticallyImplyLeading: false,
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FutureBuilder<UserModel?>(
-              future: userViewModel.fetchUserData(userViewModel.user?.userIdentifier ?? '', context),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator(); // Loading state
-                } else if (snapshot.hasError) {
-                  return Text('Error fetching user data');
-                } else if (!snapshot.hasData) {
-                  return Text('No user data available');
-                } else {
-                  UserModel user = snapshot.data!;
+        child: FutureBuilder<UserModel?>(
+          future: userViewModel.getUser(), // Fetch user from local data
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator(); // Loading indicator
+            } else if (snapshot.hasError) {
+              return const Text('Error fetching user data'); // Error handling
+            } else if (!snapshot.hasData || snapshot.data == null) {
+              return const Text('No user data available'); // No data fallback
+            } else {
+              UserModel user = snapshot.data!;
 
-                  return Card(
-                    margin: EdgeInsets.all(16.0),
-                    child: Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('User ID: ${user.userIdentifier}', style: TextStyle(fontSize: 18)),
-                          SizedBox(height: 8.0),
-                          Text('Name: ${user.name}', style: TextStyle(fontSize: 16)),
-                          SizedBox(height: 8.0),
-                          if (user.userType == 'VENDOR') ...[
-                            Text('Business Name: ${user.businessName}', style: TextStyle(fontSize: 16)),
-                            Text('GST Number: ${user.gstNumber}', style: TextStyle(fontSize: 16)),
-                            Text('Address: ${user.addressInfo?.address1}', style: TextStyle(fontSize: 16)),
-                            SizedBox(height: 8.0),
-                          ],
-                          SizedBox(height: 20),
-                          ElevatedButton(
-                            onPressed: () async {
-                              await userViewModel.remove(); // Call logout method
-                              Utils.snackBar('Logged out successfully', context);
-                              Navigator.pushReplacementNamed(context, RoutesNames.login);
-                            },
-                            child: const Text('Logout'),
-                          ),
-                        ],
+              return Card(
+                margin: const EdgeInsets.all(16.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('User ID: ${user.userIdentifier}', style: const TextStyle(fontSize: 18)),
+                      const SizedBox(height: 16), // Adds spacing between UI elements
+                      ElevatedButton(
+                        onPressed: () async {
+                          bool success = await userViewModel.removeUser(); // Clear user data
+                          if (success) {
+                            Utils.snackBar('Logged out successfully', context);
+                            Navigator.pushReplacementNamed(context, RoutesNames.login);
+                          } else {
+                            Utils.snackBar('Logout failed', context);
+                          }
+                        },
+                        child: const Text('Logout'),
                       ),
-                    ),
-                  );
-                }
-              },
-            ),
-          ],
+                    ],
+                  ),
+                ),
+              );
+            }
+          },
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushReplacementNamed(context, RoutesNames.profile);
+        },
+        child: const Icon(Icons.person),
+        tooltip: 'Go to Profile',
       ),
     );
   }

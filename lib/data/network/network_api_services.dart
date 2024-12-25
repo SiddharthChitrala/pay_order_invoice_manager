@@ -11,9 +11,15 @@ class NetworkApiServices extends BaseApiServices {
   Future<dynamic> getGetApiResponse(String url,
       {Map<String, String>? headers}) async {
     dynamic responseJson;
+
     try {
+      print(headers);
+      print(url);
       final response =
-          await http.get(Uri.parse(url)).timeout(const Duration(seconds: 10));
+          await http.get(Uri.parse(url),headers: headers).timeout(const Duration(seconds: 20));
+      print(response.statusCode);
+      print(response.body);
+
       responseJson = returnResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet connection');
@@ -34,10 +40,11 @@ class NetworkApiServices extends BaseApiServices {
             headers: headers,
           )
           .timeout(const Duration(seconds: 40));
+      print(headers);
       print(url);
       print(response.statusCode);
       print(response.body);
-      print(headers);
+
       responseJson = returnResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet connection');
@@ -53,9 +60,7 @@ class NetworkApiServices extends BaseApiServices {
     try {
       final response = await http.put(Uri.parse(url),
           body: jsonEncode(data),
-          headers: {
-            "Content-Type": "application/json"
-          }).timeout(const Duration(seconds: 10));
+          headers: headers).timeout(const Duration(seconds: 10));
       responseJson = returnResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet connection');
@@ -70,7 +75,7 @@ class NetworkApiServices extends BaseApiServices {
     dynamic responseJson;
     try {
       final response = await http
-          .delete(Uri.parse(url))
+          .delete(Uri.parse(url), headers: headers)
           .timeout(const Duration(seconds: 10));
       responseJson = returnResponse(response);
     } on SocketException {

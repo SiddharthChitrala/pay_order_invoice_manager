@@ -4,21 +4,31 @@ import '../../utils/routes/routes_name.dart';
 import '../user_view_model.dart';
 
 class SplashServices {
-  Future<UserModel> getUserData() async => UserViewModel().getUser();
+  /// Fetch user data using the `UserViewModel`.
+  Future<UserModel?> getUserData() async {
+    final userViewModel = UserViewModel();
+    return await userViewModel.getUser();
+  }
 
+  /// Check authentication and navigate accordingly.
   void checkAuthentication(BuildContext context) async {
     try {
+      // Retrieve user data
       final user = await getUserData();
 
-      await Future.delayed(const Duration(seconds: 10));
+      // Simulate splash delay
+      await Future.delayed(const Duration(seconds: 3));
 
-      if (user.userIdentifier == null || user.userIdentifier!.isEmpty) {
-        Navigator.pushNamed(context, RoutesNames.login);
+      // Navigate based on authentication status
+      if (user == null || user.userIdentifier == null || user.userIdentifier!.isEmpty) {
+        Navigator.pushReplacementNamed(context, RoutesNames.login);
       } else {
-        Navigator.pushNamed(context, RoutesNames.home);
+        Navigator.pushReplacementNamed(context, RoutesNames.home);
       }
     } catch (e) {
       print("Error in authentication check: $e");
+      // Fallback to login screen on error
+      Navigator.pushReplacementNamed(context, RoutesNames.login);
     }
   }
 }

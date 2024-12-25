@@ -1,6 +1,6 @@
 import 'address_info_model.dart';
 
-class UserModel extends AddressInfo{
+class UserModel extends AddressInfo {
   
   String? userIdentifier;
   String? otp;
@@ -41,7 +41,7 @@ class UserModel extends AddressInfo{
     data['userType'] = userType;
     data['businessName'] = businessName;
     data['gstNumber'] = gstNumber;
-    data['addressInfo']=addressInfo;
+    data['addressInfo'] = addressInfo?.toJson(); // Ensure to call `toJson` for nested objects
     return data;
   }
 }
