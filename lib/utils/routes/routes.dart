@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pay_order_invoice_manager/view/home_screen.dart';
+import 'package:pay_order_invoice_manager/view/profile_details_screen.dart';
 import 'package:pay_order_invoice_manager/view/user_profile_screen.dart';
 
 import '../../view/login_screen.dart';
@@ -16,14 +17,17 @@ class Routes {
       case RoutesNames.splash:
         return MaterialPageRoute(
             builder: (BuildContext context) => const SplashScreen());
-      
+
       case RoutesNames.home:
         return MaterialPageRoute(
             builder: (BuildContext context) => const HomeScreen());
 
-       case RoutesNames.profile:
+      case RoutesNames.profile:
         return MaterialPageRoute(
             builder: (BuildContext context) => UserProfileScreen());
+      case RoutesNames.createUserDetails:
+        return MaterialPageRoute(
+            builder: (BuildContext context) => CreateUserScreen());
       default:
         return MaterialPageRoute(
             builder: (context) => const Scaffold(

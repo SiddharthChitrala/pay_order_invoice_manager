@@ -9,7 +9,7 @@ import 'user_view_model.dart';
 
 class AuthViewModel with ChangeNotifier {
   final _myRepo = AuthRepository();
-  
+
   bool _loading = false;
   bool get loading => _loading;
 
@@ -18,7 +18,8 @@ class AuthViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loginApi(String userIdentifier, String otp, BuildContext context) async {
+  Future<void> loginApi(
+      String userIdentifier, String otp, BuildContext context) async {
     setLoading(true);
 
     try {
@@ -53,5 +54,25 @@ class AuthViewModel with ChangeNotifier {
     final userIdentifier = prefs.getString('userIdentifier') ?? '';
     final otp = prefs.getString('otp') ?? '';
     return {'userIdentifier': userIdentifier, 'otp': otp};
+  }
+
+  Future<void> createUser(UserModel user, BuildContext context) async {
+    setLoading(true);
+
+    try {
+      // Retrieve the current userIdentifier from shared preferences
+      final prefs = await SharedPreferences.getInstance();
+      final userIdentifier = prefs.getString('userIdentifier') ?? '';
+
+      // Call the repository to create the user
+      await _myRepo.createUser(user, userIdentifier);
+
+      setLoading(false);
+      Utils.snackBar('User created successfully!', context);
+      Navigator.pop(context); // Navigate back after creation
+    } catch (e) {
+      setLoading(false);
+      Utils.snackBar('Error: ${e.toString()}', context);
+    }
   }
 }

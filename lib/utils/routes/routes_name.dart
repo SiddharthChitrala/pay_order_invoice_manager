@@ -3,4 +3,5 @@ class RoutesNames {
   static const String splash = 'splash_screen';
   static const String home = 'home_screen';
   static const String profile = 'profile_screen';
+  static const String createUserDetails = 'Create_Profile_screen';
 }

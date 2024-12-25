@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/user_model.dart';
+import '../utils/routes/routes_name.dart';
 import '../vm/user_view_model.dart';
 
 class UserProfileScreen extends StatelessWidget {
@@ -55,6 +56,24 @@ class UserProfileScreen extends StatelessWidget {
                         Text('Address: ${user.addressInfo?.address1}',
                             style: const TextStyle(fontSize: 16)),
                       ],
+                      const SizedBox(height: 16.0),
+                      // Conditional button for ADMIN and APPROVER
+                      if (user.userType == 'ADMIN' ||
+                          user.userType == 'APPROVER')
+                        ElevatedButton(
+                          onPressed: () {
+                            // Action for the button
+                            Navigator.pushNamed(
+                                context, RoutesNames.createUserDetails);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content:
+                                    Text('Button pressed by ${user.userType}!'),
+                              ),
+                            );
+                          },
+                          child: const Text('Special Action'),
+                        ),
                     ],
                   ),
                 ),
