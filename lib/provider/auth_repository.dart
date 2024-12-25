@@ -64,7 +64,8 @@ class AuthRepository {
     }
   }
 
-  Future<List<UserModel>> getUsersByType(String userType , String userIdentifier ) async {
+  Future<List<UserModel>> getUsersByType(
+      String userType, String userIdentifier) async {
     final headers = {
       'API_Client_Id': 'milestone',
       'API_Client_Secret': '1234567890',
@@ -72,11 +73,16 @@ class AuthRepository {
       'Content-Type': 'application/json',
       'ACTION_PERFORMED_BY_USER': userIdentifier,
     };
-    final response = await _apiServices.getPostApiResponse(
-      AppUrl.getUsersByTypeUrl, // Ensure this endpoint accepts POST
-      {'userType': userType},
+    final response = await _apiServices.getGetApiResponse(
+      '${AppUrl.getUsersByTypeUrl}?userType=$userType',
       headers: headers,
     );
-    return (response as List).map((data) => UserModel.fromJson(data)).toList();
+    if (response is Map<String, dynamic> && response.containsKey('data')) {
+      return (response['data'] as List)
+          .map((data) => UserModel.fromJson(data))
+          .toList();
+    } else {
+      throw Exception('Unexpected response format');
+    }
   }
 }
