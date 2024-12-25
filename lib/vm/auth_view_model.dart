@@ -75,4 +75,6 @@ class AuthViewModel with ChangeNotifier {
       Utils.snackBar('Error: ${e.toString()}', context);
     }
   }
+
+  
 }

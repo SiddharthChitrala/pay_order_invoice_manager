@@ -63,6 +63,9 @@ class UserViewModel with ChangeNotifier {
     }
   }
 
+
+
+
   /// Remove user data from SharedPreferences
   Future<bool> removeUser() async {
     final sp = await _getSharedPreferences();

@@ -74,6 +74,23 @@ class UserProfileScreen extends StatelessWidget {
                           },
                           child: const Text('Special Action'),
                         ),
+                      const SizedBox(height: 16.0),
+                      // Button to navigate to Home Screen
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, RoutesNames.home);
+                        },
+                        child: const Text('Home'),
+                      ),
+                      const SizedBox(height: 8.0),
+                      // Button to navigate back to the User Profile Screen
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(
+                              context, RoutesNames.viewUserByType);
+                        },
+                        child: const Text('See user By Type'),
+                      ),
                     ],
                   ),
                 ),
