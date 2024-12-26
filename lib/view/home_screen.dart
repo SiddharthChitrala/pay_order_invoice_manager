@@ -43,14 +43,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('User ID: ${user.userIdentifier}', style: const TextStyle(fontSize: 18)),
-                      const SizedBox(height: 16), // Adds spacing between UI elements
+                      Text('User ID: ${user.userIdentifier}',
+                          style: const TextStyle(fontSize: 18)),
+                      const SizedBox(
+                          height: 16), // Adds spacing between UI elements
                       ElevatedButton(
                         onPressed: () async {
-                          bool success = await userViewModel.removeUser(); // Clear user data
+                          bool success = await userViewModel
+                              .removeUser(); // Clear user data
                           if (success) {
                             Utils.snackBar('Logged out successfully', context);
-                            Navigator.pushReplacementNamed(context, RoutesNames.login);
+                            Navigator.pushReplacementNamed(
+                                context, RoutesNames.login);
                           } else {
                             Utils.snackBar('Logout failed', context);
                           }
@@ -65,12 +69,53 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushReplacementNamed(context, RoutesNames.profile);
-        },
-        child: const Icon(Icons.person),
-        tooltip: 'Go to Profile',
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          InkWell(
+            onTap: () {
+              Navigator.pushReplacementNamed(context, RoutesNames.profile);
+            },
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 16),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.person, color: Colors.white),
+                  SizedBox(width: 8),
+                  Text('Profile', style: TextStyle(color: Colors.white)),
+                ],
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              Navigator.pushReplacementNamed(context, RoutesNames.siteDetails);
+            },
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 16),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.location_on_rounded, color: Colors.white),
+                  SizedBox(width: 8),
+                  Text('Create Site', style: TextStyle(color: Colors.white)),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pay_order_invoice_manager/utils/routes/routes.dart';
 import 'package:pay_order_invoice_manager/utils/routes/routes_name.dart';
+import 'package:pay_order_invoice_manager/vm/site_view_model.dart';
 
 import 'package:provider/provider.dart';
-
 
 import 'vm/auth_view_model.dart';
 import 'vm/user_view_model.dart';
@@ -24,7 +24,8 @@ class MyApp extends StatelessWidget {
           ),
           ChangeNotifierProvider(
             create: (_) => UserViewModel(),
-          )
+          ),
+          ChangeNotifierProvider(create: (_) => SiteViewModel()),
         ],
         child: MaterialApp(
           title: 'Flutter Demo',
