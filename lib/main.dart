@@ -6,6 +6,7 @@ import 'package:pay_order_invoice_manager/vm/site_view_model.dart';
 import 'package:provider/provider.dart';
 
 import 'vm/auth_view_model.dart';
+import 'vm/purchase_order_view_model.dart';
 import 'vm/user_view_model.dart';
 
 void main() {
@@ -26,6 +27,9 @@ class MyApp extends StatelessWidget {
             create: (_) => UserViewModel(),
           ),
           ChangeNotifierProvider(create: (_) => SiteViewModel()),
+          ChangeNotifierProvider(
+               create: (_) => PurchaseOrderViewModel(),
+          )
         ],
         child: MaterialApp(
           title: 'Flutter Demo',

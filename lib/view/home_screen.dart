@@ -115,6 +115,27 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
+          InkWell(
+            onTap: () {
+              Navigator.pushReplacementNamed(context, RoutesNames.purchaseOrderDetails);
+            },
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 16),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.payment_rounded, color: Colors.white),
+                  SizedBox(width: 8),
+                  Text('Create PO', style: TextStyle(color: Colors.white)),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

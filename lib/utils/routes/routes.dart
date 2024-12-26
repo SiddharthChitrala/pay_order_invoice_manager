@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pay_order_invoice_manager/view/home_screen.dart';
 import 'package:pay_order_invoice_manager/view/profile_details_screen.dart';
+import 'package:pay_order_invoice_manager/view/purchase_order_screen.dart';
 import 'package:pay_order_invoice_manager/view/site_details_screen.dart';
 import 'package:pay_order_invoice_manager/view/user_profile_screen.dart';
 import 'package:pay_order_invoice_manager/view/user_type_def_screen.dart';
@@ -36,6 +37,9 @@ class Routes {
             case RoutesNames.siteDetails:
         return MaterialPageRoute(
             builder: (BuildContext context) => SiteDetailsScreen());
+      case RoutesNames.purchaseOrderDetails:
+        return MaterialPageRoute(
+            builder: (BuildContext context) => PurchaseOrderScreen());
       default:
         return MaterialPageRoute(
             builder: (context) => const Scaffold(

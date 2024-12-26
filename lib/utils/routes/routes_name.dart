@@ -6,4 +6,5 @@ class RoutesNames {
   static const String createUserDetails = 'Create_Profile_screen';
   static const String viewUserByType = 'view_user_by_type';
   static const String siteDetails = 'site_details';
+  static const String purchaseOrderDetails = 'purchase_order_details';
 }
